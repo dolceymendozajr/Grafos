@@ -33,6 +33,10 @@ public class Nodo {
         return peso;
     }
 
+    public char getId() {
+        return id;
+    }
+
     public void setPeso(int peso) {
         this.peso = peso;
     }
