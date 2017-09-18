@@ -5,6 +5,9 @@
  */
 package vista;
 
+import controlador.Grafos;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,6 +22,22 @@ public class Vista extends javax.swing.JFrame {
     public Vista() {
         initComponents();
     }
+    
+    private void Crear(){
+        String vx=txt_vertices.getText();
+        if(!vx.isEmpty()) {
+            try {
+                int v=Integer.parseInt(vx);
+                Grafos.CrearGrafo(v);
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(rootPane, "Debe llenar los campos con números enteros","Error de ingreso", JOptionPane.ERROR_MESSAGE);
+                txt_vertices.setText("");
+            }
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Debe llenar los campos requeridos","Error de ingreso", JOptionPane.WARNING_MESSAGE);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,12 +50,12 @@ public class Vista extends javax.swing.JFrame {
 
         Fondo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         txt_vertices = new javax.swing.JTextField();
-        txt_aristas = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         Imagen = new javax.swing.JLabel();
-        btn_graficar = new javax.swing.JButton();
+        btn_crear = new javax.swing.JButton();
+        btn_cargar = new javax.swing.JButton();
+        btn_descargar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -47,20 +66,46 @@ public class Vista extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Número de Vertices");
 
-        jLabel2.setFont(new java.awt.Font("Swis721 LtCn BT", 1, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Número de Aristas");
+        txt_vertices.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_verticesKeyPressed(evt);
+            }
+        });
 
         Imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/graph.png"))); // NOI18N
 
-        btn_graficar.setBackground(new java.awt.Color(161, 192, 87));
-        btn_graficar.setFont(new java.awt.Font("Swis721 LtCn BT", 1, 18)); // NOI18N
-        btn_graficar.setForeground(new java.awt.Color(255, 255, 255));
-        btn_graficar.setText("Graficar");
-        btn_graficar.setBorderPainted(false);
-        btn_graficar.addActionListener(new java.awt.event.ActionListener() {
+        btn_crear.setBackground(new java.awt.Color(161, 192, 87));
+        btn_crear.setFont(new java.awt.Font("Swis721 LtCn BT", 1, 18)); // NOI18N
+        btn_crear.setForeground(new java.awt.Color(255, 255, 255));
+        btn_crear.setText("Crear grafo");
+        btn_crear.setBorderPainted(false);
+        btn_crear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_graficarActionPerformed(evt);
+                btn_crearActionPerformed(evt);
+            }
+        });
+
+        btn_cargar.setBackground(new java.awt.Color(161, 192, 87));
+        btn_cargar.setFont(new java.awt.Font("Swis721 LtCn BT", 1, 18)); // NOI18N
+        btn_cargar.setForeground(new java.awt.Color(255, 255, 255));
+        btn_cargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/up.png"))); // NOI18N
+        btn_cargar.setToolTipText("Cargar grafo");
+        btn_cargar.setBorderPainted(false);
+        btn_cargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cargarActionPerformed(evt);
+            }
+        });
+
+        btn_descargar.setBackground(new java.awt.Color(161, 192, 87));
+        btn_descargar.setFont(new java.awt.Font("Swis721 LtCn BT", 1, 18)); // NOI18N
+        btn_descargar.setForeground(new java.awt.Color(255, 255, 255));
+        btn_descargar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/down.png"))); // NOI18N
+        btn_descargar.setToolTipText("Descargar grafo");
+        btn_descargar.setBorderPainted(false);
+        btn_descargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_descargarActionPerformed(evt);
             }
         });
 
@@ -69,47 +114,49 @@ public class Vista extends javax.swing.JFrame {
         FondoLayout.setHorizontalGroup(
             FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(FondoLayout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(Imagen)
                 .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(FondoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
-                        .addGap(40, 40, 40)
-                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txt_aristas, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txt_vertices, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addContainerGap()
+                        .addComponent(Imagen)
+                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(FondoLayout.createSequentialGroup()
+                                .addGap(31, 31, 31)
+                                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txt_vertices, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3))
+                            .addGroup(FondoLayout.createSequentialGroup()
+                                .addGap(48, 48, 48)
+                                .addComponent(btn_crear))))
                     .addGroup(FondoLayout.createSequentialGroup()
-                        .addGap(78, 78, 78)
-                        .addComponent(btn_graficar)))
-                .addContainerGap(51, Short.MAX_VALUE))
+                        .addGap(32, 32, 32)
+                        .addComponent(btn_cargar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_descargar)))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         FondoLayout.setVerticalGroup(
             FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(FondoLayout.createSequentialGroup()
-                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(FondoLayout.createSequentialGroup()
                         .addGap(76, 76, 76)
-                        .addComponent(jLabel3))
+                        .addComponent(jLabel3)
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_vertices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_crear))
                     .addGroup(FondoLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
+                        .addContainerGap()
                         .addComponent(Imagen)))
-                .addContainerGap(48, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FondoLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txt_vertices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txt_aristas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addComponent(btn_graficar)
-                .addGap(23, 23, 23))
+                .addGap(18, 18, 18)
+                .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_cargar)
+                    .addComponent(btn_descargar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -126,23 +173,23 @@ public class Vista extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_graficarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_graficarActionPerformed
-        String vx=txt_vertices.getText();
-        String ed=txt_aristas.getText();
-        if((!vx.isEmpty())&&(!ed.isEmpty())) {
-            try {
-                int v=Integer.parseInt(vx);
-                int a=Integer.parseInt(ed);
-                
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(rootPane, "Debe llenar los campos con números enteros","Error de ingreso", JOptionPane.ERROR_MESSAGE);
-                txt_vertices.setText("");
-                txt_aristas.setText("");
-            }
-        }else{
-            JOptionPane.showMessageDialog(rootPane, "Debe llenar los campos requeridos","Error de ingreso", JOptionPane.WARNING_MESSAGE);
+    private void btn_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_crearActionPerformed
+        Crear();
+    }//GEN-LAST:event_btn_crearActionPerformed
+
+    private void btn_cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_cargarActionPerformed
+
+    private void btn_descargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_descargarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_descargarActionPerformed
+
+    private void txt_verticesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_verticesKeyPressed
+        if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
+            Crear();
         }
-    }//GEN-LAST:event_btn_graficarActionPerformed
+    }//GEN-LAST:event_txt_verticesKeyPressed
 
     /**
      * @param args the command line arguments
@@ -182,11 +229,11 @@ public class Vista extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Fondo;
     private javax.swing.JLabel Imagen;
-    private javax.swing.JButton btn_graficar;
+    private javax.swing.JButton btn_cargar;
+    private javax.swing.JButton btn_crear;
+    private javax.swing.JButton btn_descargar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField txt_aristas;
     private javax.swing.JTextField txt_vertices;
     // End of variables declaration//GEN-END:variables
 }
