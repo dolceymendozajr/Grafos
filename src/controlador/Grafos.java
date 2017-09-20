@@ -1,5 +1,9 @@
 package controlador;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.JOptionPane;
 import modelo.Nodo;
 import vista.Vista;
@@ -12,24 +16,32 @@ public class Grafos {
 
     /*Creacion de la matriz de adyacencia que luego generara el grafo */
     static int MA[][];
+    static int vertices;
 
     public static void main(String[] args) {
+        //Crea el directorio raíz donde se guardaron los archivos txt para la lista y la matriz
+        File d = new File("C:/apps/");
+        if (!d.exists()) {
+            d.mkdirs();
+        }
         Vista v = new Vista();
         v.setLocationRelativeTo(null);
         v.setVisible(true);
     }
 
     /*Método que permite Crear la matriz de Adyacencia*/
+//    TOFIX
     public static void CrearMatriz(int v) {
         MA = new int[v][v];
+        vertices = v;
         boolean sw;
-        int a=-1;
-        int p=-1;
+        int a = -1;
+        int p = -1;
         for (int i = 0; i < v; i++) {
-            System.out.println("Nodo" + i);
+            System.out.println("Nodo " + i);
             do {
                 try {
-                    String ar = JOptionPane.showInputDialog(null, "Digite a que vertice esta conectado el vertice " + i);
+                    String ar = JOptionPane.showInputDialog(null, "Digite a que vertices esta conectado el vertice " + i+"\nDebe separarlos por comas");
                     a = Integer.parseInt(ar);
                     String pe = JOptionPane.showInputDialog(null, "Digite el peso de aristas la arista " + i + a);
                     p = Integer.parseInt(pe);
@@ -39,41 +51,50 @@ public class Grafos {
                     sw = true;
                 }
             } while (sw);
-            if (!(a==p&&p==-1)) {
+            if (!(a == p && p == -1)) {
                 MA[i][a] = p;
             }
         }
+        JOptionPane.showMessageDialog(null, "Matriz Creada");
     }
 
-//        char idr = JOptionPane.showInputDialog("Digite la letra del vertice").charAt(0);
-//        root = new Nodo(idr);
-//        v--;
-//        for (int i = 0; i < v; i++) {
-//            boolean sw;
-//            System.out.println("1");
-//            do {
-//                try {
-//                    String ar = JOptionPane.showInputDialog(null, "Digite el número de aristas para el vertice A");
-//                    int a = Integer.parseInt(ar);
-//                    sw = false;
-//                } catch (Exception e) {
-//                    JOptionPane.showMessageDialog(null, "Debe llenar los campos con números enteros", "Error de ingreso", JOptionPane.ERROR_MESSAGE);
-//                    sw = true;
-//                    System.out.println(e);
-//                }
-//            } while (sw);
-//            char id = JOptionPane.showInputDialog("Digite la letra del vertice").charAt(0);
-//            root.addHijo(id);
-//        }
+    /*Método que guarda la matriz de adyacencia en un archivo*/
+    public static void GuardarMatriz() throws IOException {
+        int v = vertices;
+        File m = new File("C:/apps/matriz.txt");
+        BufferedWriter bw;
+        bw = new BufferedWriter(new FileWriter(m, false));
+        String c;
+        for (int i = 0; i < v; i++) {
+            c = "";
+            for (int j = 0; j < v; j++) {
+                if (j == v - 1) {
+                    c = c + MA[i][j];
+                } else {
+                    c = c + MA[i][j] + ",";
+                }
+            }
+            bw.write(c);
+            bw.newLine();
+        }
+        bw.close();
+        JOptionPane.showMessageDialog(null, "Matriz guardada en C:/apps/matriz.txt");
+
+    }
+
+    /*Método que retorna la matriz de adyacencia*/
+    public static int[][] getMatriz() {
+        return MA;
+    }
     
-    /*Método que guardará la matriz de adyacencia en un archivo*/
+    /*Método que muestra la matriz de adyacencia*/
     public static void MostrarMatriz(int v) {
         for (int i = 0; i < v; i++) {
             for (int j = 0; j < v; j++) {
-                if(j==v-1){
+                if (j == v - 1) {
                     System.out.print(MA[i][j]);
-                }else{
-                    System.out.print(MA[i][j]+",");
+                } else {
+                    System.out.print(MA[i][j] + ",");
                 }
             }
             System.out.println("");
