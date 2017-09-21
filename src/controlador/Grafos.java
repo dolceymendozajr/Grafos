@@ -30,7 +30,6 @@ public class Grafos {
     }
 
     /*Método que permite Crear la matriz de Adyacencia*/
-//    TOFIX
     public static void CrearMatriz(int v) {
         MA = new int[v][v];
         vertices = v;
@@ -41,19 +40,22 @@ public class Grafos {
             System.out.println("Nodo " + i);
             do {
                 try {
-                    String ar = JOptionPane.showInputDialog(null, "Digite a que vertices esta conectado el vertice " + i+"\nDebe separarlos por comas");
-                    a = Integer.parseInt(ar);
-                    String pe = JOptionPane.showInputDialog(null, "Digite el peso de aristas la arista " + i + a);
-                    p = Integer.parseInt(pe);
+                    String in = JOptionPane.showInputDialog(null, "Digite a que vertices esta conectado el vertice " + i + "\nDebe separarlos por comas");
+                    String ar[] = in.split(",");
+                    for (int j = 0; j < ar.length; j++) {
+                        a = Integer.parseInt(ar[j]);
+                        String pe = JOptionPane.showInputDialog(null, "Digite el peso de la arista " + i + a);
+                        p = Integer.parseInt(pe);
+                        if (!(a == p && p == -1)) {
+                            MA[i][a] = p;
+                        }
+                    }
                     sw = false;
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Debe llenar los campos con números enteros", "Error de ingreso", JOptionPane.ERROR_MESSAGE);
                     sw = true;
                 }
             } while (sw);
-            if (!(a == p && p == -1)) {
-                MA[i][a] = p;
-            }
         }
         JOptionPane.showMessageDialog(null, "Matriz Creada");
     }
@@ -86,7 +88,7 @@ public class Grafos {
     public static int[][] getMatriz() {
         return MA;
     }
-    
+
     /*Método que muestra la matriz de adyacencia*/
     public static void MostrarMatriz(int v) {
         for (int i = 0; i < v; i++) {
