@@ -13,11 +13,11 @@ import java.util.ArrayList;
  */
 public class Nodo {
     
-    char id;
+    int id;
     ArrayList<Nodo> hijos;
     int peso;
 
-    public Nodo(char id) {
+    public Nodo(int id) {
         this.id = id;
     }
 
@@ -33,7 +33,7 @@ public class Nodo {
         return peso;
     }
 
-    public char getId() {
+    public int getId() {
         return id;
     }
 

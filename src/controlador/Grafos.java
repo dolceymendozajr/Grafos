@@ -1,7 +1,9 @@
 package controlador;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -29,18 +31,18 @@ public class Grafos {
         v.setVisible(true);
     }
 
-    /*Método que permite Crear la matriz de Adyacencia*/
+    /*Método que crea la matriz de adyacencia*/
     public static void CrearMatriz(int v) {
         MA = new int[v][v];
         vertices = v;
         boolean sw;
         int a = -1;
         int p = -1;
+        String in = null;
         for (int i = 0; i < v; i++) {
-            System.out.println("Nodo " + i);
             do {
                 try {
-                    String in = JOptionPane.showInputDialog(null, "Digite a que vertices esta conectado el vertice " + i + "\nDebe separarlos por comas");
+                    in = JOptionPane.showInputDialog(null, "Digite a que vertices esta conectado el vertice " + i + "\nDebe separarlos por comas");
                     String ar[] = in.split(",");
                     for (int j = 0; j < ar.length; j++) {
                         a = Integer.parseInt(ar[j]);
@@ -52,8 +54,12 @@ public class Grafos {
                     }
                     sw = false;
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Debe llenar los campos con números enteros", "Error de ingreso", JOptionPane.ERROR_MESSAGE);
-                    sw = true;
+                    if (in == null) {
+                        sw = false;
+                    } else {
+                        sw = true;
+                        JOptionPane.showMessageDialog(null, "Debe llenar los campos con números enteros", "Error de ingreso", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             } while (sw);
         }
@@ -84,6 +90,35 @@ public class Grafos {
 
     }
 
+    /*Método que guarda la matriz de adyacencia en un archivo*/
+//    TOFIX
+    public static void CargarMatriz() throws IOException {
+        int v = vertices;
+        File m = new File("C:/apps/matriz.txt");
+        BufferedReader br,bl;
+        bl = new BufferedReader(new FileReader(m));
+        String c;
+        int l = 0;
+        while ((c = bl.readLine()) != null) {
+            l++;
+        }
+        bl.close();
+        br = new BufferedReader(new FileReader(m));
+        c=null;
+        while ((c = br.readLine()) != null) {
+            String n[]=c.split(",");
+            for (int i = 0; i < l; i++) {
+                for (int j = 0; j < l; j++) {
+                    MA[i][j]=Integer.parseInt(n[0]);
+                }
+            }
+        }
+        br.close();
+        
+        JOptionPane.showMessageDialog(null, "Matriz cargada de C:/apps/matriz.txt");
+
+    }
+
     /*Método que retorna la matriz de adyacencia*/
     public static int[][] getMatriz() {
         return MA;
@@ -103,4 +138,9 @@ public class Grafos {
         }
     }
 
+    /*Método que crea la lista*/
+//    TODO
+    public static void CrearLista() {
+
+    }
 }

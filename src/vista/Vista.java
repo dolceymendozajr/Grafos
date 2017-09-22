@@ -24,6 +24,7 @@ public class Vista extends javax.swing.JFrame {
      * Creates new form Vista
      */
     int v = 0;
+
     public Vista() {
         initComponents();
     }
@@ -34,7 +35,7 @@ public class Vista extends javax.swing.JFrame {
             try {
                 v = Integer.parseInt(vx);
                 Grafos.CrearMatriz(v);
-                Grafos.MostrarMatriz(v);
+                MostrarMatriz();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(rootPane, "Debe llenar los campos con números enteros", "Error de ingreso", JOptionPane.ERROR_MESSAGE);
                 txt_vertices.setText("");
@@ -48,7 +49,7 @@ public class Vista extends javax.swing.JFrame {
     private void MostrarMatriz() {
         int[][] MA = Grafos.getMatriz();
         DefaultTableModel modelo = (DefaultTableModel) tbl_matriz.getModel();
-        if (v!=0) {
+        if (v != 0) {
             modelo.setColumnCount(v);
             modelo.setRowCount(v);
             for (int i = 0; i < v; i++) {
@@ -56,7 +57,7 @@ public class Vista extends javax.swing.JFrame {
                     tbl_matriz.setValueAt(MA[i][j], i, j);
                 }
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(rootPane, "Debe llenar los campos requeridos", "Error de ingreso", JOptionPane.WARNING_MESSAGE);
         }
     }
@@ -73,7 +74,6 @@ public class Vista extends javax.swing.JFrame {
         btn_crear = new javax.swing.JButton();
         btn_cargar = new javax.swing.JButton();
         btn_descargar = new javax.swing.JButton();
-        btn_ver = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_matriz = new javax.swing.JTable();
         lbl_matriz = new javax.swing.JLabel();
@@ -131,18 +131,6 @@ public class Vista extends javax.swing.JFrame {
             }
         });
 
-        btn_ver.setBackground(new java.awt.Color(161, 192, 87));
-        btn_ver.setFont(new java.awt.Font("Swis721 LtCn BT", 1, 18)); // NOI18N
-        btn_ver.setForeground(new java.awt.Color(255, 255, 255));
-        btn_ver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/vista/view.png"))); // NOI18N
-        btn_ver.setToolTipText("Ver");
-        btn_ver.setBorderPainted(false);
-        btn_ver.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_verActionPerformed(evt);
-            }
-        });
-
         tbl_matriz.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -175,10 +163,8 @@ public class Vista extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel3))
                             .addGroup(FondoLayout.createSequentialGroup()
-                                .addGap(45, 45, 45)
-                                .addComponent(btn_crear)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_ver))))
+                                .addGap(80, 80, 80)
+                                .addComponent(btn_crear))))
                     .addGroup(FondoLayout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(btn_cargar)
@@ -207,9 +193,7 @@ public class Vista extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txt_vertices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(FondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btn_crear)
-                            .addComponent(btn_ver))))
+                        .addComponent(btn_crear)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addComponent(lbl_matriz)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -253,10 +237,6 @@ public class Vista extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txt_verticesKeyPressed
 
-    private void btn_verActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_verActionPerformed
-        MostrarMatriz();
-    }//GEN-LAST:event_btn_verActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -298,7 +278,6 @@ public class Vista extends javax.swing.JFrame {
     private javax.swing.JButton btn_cargar;
     private javax.swing.JButton btn_crear;
     private javax.swing.JButton btn_descargar;
-    private javax.swing.JButton btn_ver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
