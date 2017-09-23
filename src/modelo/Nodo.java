@@ -25,7 +25,7 @@ public class Nodo {
         return hijos;
     }
 
-    public void addHijo(char id) {
+    public void addHijo(int id) {
         this.hijos.add(new Nodo(id));
     }
 

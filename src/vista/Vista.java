@@ -6,7 +6,6 @@
 package vista;
 
 import controlador.Grafos;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -35,7 +34,7 @@ public class Vista extends javax.swing.JFrame {
             try {
                 v = Integer.parseInt(vx);
                 Grafos.CrearMatriz(v);
-                MostrarMatriz();
+                MostrarMatriz(v);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(rootPane, "Debe llenar los campos con números enteros", "Error de ingreso", JOptionPane.ERROR_MESSAGE);
                 txt_vertices.setText("");
@@ -46,7 +45,7 @@ public class Vista extends javax.swing.JFrame {
         }
     }
 
-    private void MostrarMatriz() {
+    private void MostrarMatriz(int v) {
         int[][] MA = Grafos.getMatriz();
         DefaultTableModel modelo = (DefaultTableModel) tbl_matriz.getModel();
         if (v != 0) {
@@ -220,7 +219,12 @@ public class Vista extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_crearActionPerformed
 
     private void btn_cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cargarActionPerformed
-        // TODO add your handling code here:
+        try {
+            Grafos.CargarMatriz();
+            MostrarMatriz(Grafos.getVerticesMatriz());
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Matriz no pudo ser cargada de C:/apps/matriz.txt", "Error al cargar la matriz", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btn_cargarActionPerformed
 
     private void btn_descargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_descargarActionPerformed
