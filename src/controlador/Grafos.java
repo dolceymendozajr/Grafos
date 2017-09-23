@@ -8,6 +8,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
 import javax.swing.JOptionPane;
 import modelo.Nodo;
 import vista.Vista;
@@ -22,7 +25,8 @@ public class Grafos {
     static int MA[][];
     static int vertices;
     static Nodo ptr;
-    static ArrayList<Nodo> nodos = new ArrayList<Nodo>();
+    static ArrayList<Nodo> nodos = new ArrayList<>();
+    static boolean[] visitados;
 
     public static void main(String[] args) {
         //Crea el directorio raíz donde se guardaron los archivos txt para la lista y la matriz
@@ -46,17 +50,26 @@ public class Grafos {
         for (int i = 0; i < v; i++) {
             do {
                 try {
-                    in = JOptionPane.showInputDialog(null, "Digite a que vertices esta conectado el vertice " + i + "\nDebe separarlos por comas");
-                    String ar[] = in.split(",");
-                    for (int j = 0; j < ar.length; j++) {
-                        a = Integer.parseInt(ar[j]);
-                        String pe = JOptionPane.showInputDialog(null, "Digite el peso de la arista " + i + a);
-                        p = Integer.parseInt(pe);
-                        if (!(a == p && p == -1)) {
-                            MA[i][a] = p;
+                    in = JOptionPane.showInputDialog(null, "Digite a que vertices esta conectado el vertice " + i + "\nSi no tiene conexiones digite '-1'" + "\nDebe separarlos por comas");
+                    a = Integer.parseInt(in);
+                    if (a != -1) {
+                        String ar[] = in.split(",");
+                        for (int j = 0; j < ar.length; j++) {
+                            a = Integer.parseInt(ar[j]);
+                            String pe = JOptionPane.showInputDialog(null, "Digite el peso de la arista " + i + a);
+                            p = Integer.parseInt(pe);
+                            if (!(a == p && p == -1)) {
+                                MA[i][a] = p;
+                            }
                         }
+                        sw = false;
+                    } else {
+                        for (int j = 0; j < MA.length; j++) {
+                            MA[i][j] = 0;
+                        }
+                        sw = false;
                     }
-                    sw = false;
+
                 } catch (Exception e) {
                     if (in == null) {
                         sw = false;
@@ -67,7 +80,8 @@ public class Grafos {
                 }
             } while (sw);
         }
-        JOptionPane.showMessageDialog(null, "Matriz Creada");
+        CrearLista();
+        JOptionPane.showMessageDialog(null, "Matriz y lista creadas");
     }
 
     /*Método que guarda la matriz de adyacencia en un archivo*/
@@ -113,10 +127,12 @@ public class Grafos {
                 }
             }
             br.close();
-            JOptionPane.showMessageDialog(null, "Matriz cargada de C:/apps/matriz.txt");
+            JOptionPane.showMessageDialog(null, "Matriz y lista cargada de C:/apps/");
+            CrearLista();
         }
     }
-
+    
+    /*Metodo que cuenta el numero de lineas del archivo, que será igual al número de vertices de la matriz*/
     public static int getVerticesMatriz() throws FileNotFoundException, IOException {
         File m = new File("C:/apps/matriz.txt");
         BufferedReader br;
@@ -154,8 +170,10 @@ public class Grafos {
         //Agrega todos los vertices 
         ptr = new Nodo(0);
         nodos.add(ptr);
-        for (int i = 1; i < MA.length; i++) {
-            nodos.add(new Nodo(i));
+        for (int i = 0; i < MA.length; i++) {
+            if (i != 0) {
+                nodos.add(new Nodo(i));
+            }
         }
         //Agrega vertice adyacente
         Nodo p = ptr;
@@ -163,10 +181,104 @@ public class Grafos {
             for (int j = 0; j < MA.length; j++) {
                 if (MA[i][j] != 0) {
                     p.addHijo(j);
-                    p = p.getHijos().get(i);
-                    p.setPeso(MA[i][j]);
+                    Nodo q = p.getHijos().get(i);
+                    q.setPeso(MA[i][j]);
                 }
             }
         }
+    }
+
+    /*Metodo para mostrar la lista*/
+    public static String MostrarLista() {
+        String c = "";
+        Nodo p;
+        Nodo hijo;
+        for (int i = 0; i < nodos.size(); i++) {
+            p = nodos.get(i);
+            c = c + String.valueOf(p.getId());
+            for (int j = 0; j < p.getHijos().size(); j++) {
+                hijo = p.getHijos().get(j);
+                c = c + "->" + hijo.getId() + "(" + hijo.getPeso() + ")";
+            }
+            return c = c + "\n";
+        }
+        return c;
+    }
+    
+    /*Metodo que guarda la lista en un archivo*/
+    public static void GuardarLista(String text) throws IOException{
+        File l = new File("C:/apps/lista.txt");
+        BufferedWriter bw;
+        bw = new BufferedWriter(new FileWriter(l, false));
+        bw.write(text);
+        bw.close();
+        JOptionPane.showMessageDialog(null, "Lista guardada en C:/apps/lista.txt");
+    }
+
+    /*Metodo para hacer el recorrido en anchura*/
+    public static String BFS() {
+        if (MA.length != 0) {
+            visitados = new boolean[MA.length];
+            Queue<Integer> cola = new LinkedList<>();
+            ArrayList<Integer> recorridos = new ArrayList<>();
+            recorridos.add(ptr.getId());
+            cola.add(ptr.getId());
+            visitados[0] = true;
+            while (!cola.isEmpty()) {
+                int j = cola.remove();
+                for (int i = 0; i < MA.length; i++) {
+                    if (MA[i][j] != 0 && !visitados[i]) {
+                        cola.add(i);
+                        recorridos.add(i);
+                        visitados[i] = true;
+                    }
+                }
+            }
+            String c = "";
+            for (int i = 0; i < recorridos.size(); i++) {
+                if (i == recorridos.size() - 1) {
+                    c = c + recorridos.get(i);
+                } else {
+                    c = c + recorridos.get(i) + ",";
+                }
+            }
+            return c;
+        } else {
+            return "No se ha creado el grafo";
+        }
+    }
+
+    /*Metodo para hacer el recorrido en profundidad*/
+    public static String DFS() {
+        if (MA.length != 0) {
+            visitados = new boolean[MA.length];
+            Stack<Integer> pila = new Stack<>();
+            ArrayList<Integer> recorridos = new ArrayList<>();
+            recorridos.add(ptr.getId());
+            pila.add(ptr.getId());
+            visitados[0] = true;
+            while (!pila.isEmpty()) {
+                int j = pila.pop();
+                for (int i = 0; i < MA.length; i++) {
+                    if (MA[i][j] != 0 && !visitados[i]) {
+                        pila.add(i);
+                        recorridos.add(i);
+                        visitados[i] = true;
+                    }
+                }
+            }
+            String c = "";
+            for (int i = 0; i < recorridos.size(); i++) {
+                if (i == recorridos.size() - 1) {
+                    c = c + recorridos.get(i);
+                } else {
+                    c = c + recorridos.get(i) + ",";
+                }
+            }
+            return c;
+        } else {
+            return "No se ha creado el grafo";
+        }
+
     }
 }

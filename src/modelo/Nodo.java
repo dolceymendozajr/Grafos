@@ -19,6 +19,7 @@ public class Nodo {
 
     public Nodo(int id) {
         this.id = id;
+        this.hijos=new ArrayList<>();
     }
 
     public ArrayList<Nodo> getHijos() {
