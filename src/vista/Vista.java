@@ -308,7 +308,7 @@ public class Vista extends javax.swing.JFrame {
 
     private void btn_dfsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dfsActionPerformed
         try {
-            JOptionPane.showMessageDialog(this, "Recorrido en profundidad: " + Grafos.DFS(), "DFS", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Recorrido en profundidad: " + Grafos.DFS(0), "DFS", JOptionPane.INFORMATION_MESSAGE);
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "No se puede hacer el recorrido sin haber creado un grafo", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -316,7 +316,7 @@ public class Vista extends javax.swing.JFrame {
 
     private void btn_bfsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bfsActionPerformed
         try {
-            JOptionPane.showMessageDialog(this, "Recorrido en anchura: " + Grafos.BFS(), "BFS", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Recorrido en anchura: " + Grafos.BFS(0), "BFS", JOptionPane.INFORMATION_MESSAGE);
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(this, "No se puede hacer el recorrido sin haber creado un grafo", "Error", JOptionPane.ERROR_MESSAGE);
         }

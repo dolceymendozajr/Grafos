@@ -51,24 +51,16 @@ public class Grafos {
             do {
                 try {
                     in = JOptionPane.showInputDialog(null, "Digite a que vertices esta conectado el vertice " + i + "\nSi no tiene conexiones digite '-1'" + "\nDebe separarlos por comas");
-                    a = Integer.parseInt(in);
-                    if (a != -1) {
-                        String ar[] = in.split(",");
-                        for (int j = 0; j < ar.length; j++) {
-                            a = Integer.parseInt(ar[j]);
-                            String pe = JOptionPane.showInputDialog(null, "Digite el peso de la arista " + i + a);
-                            p = Integer.parseInt(pe);
-                            if (!(a == p && p == -1)) {
-                                MA[i][a] = p;
-                            }
+                    String ar[] = in.split(",");
+                    for (int j = 0; j < ar.length; j++) {
+                        a = Integer.parseInt(ar[j]);
+                        String pe = JOptionPane.showInputDialog(null, "Digite el peso de la arista " + i + a);
+                        p = Integer.parseInt(pe);
+                        if (!(a == p && p == -1)) {
+                            MA[i][a] = p;
                         }
-                        sw = false;
-                    } else {
-                        for (int j = 0; j < MA.length; j++) {
-                            MA[i][j] = 0;
-                        }
-                        sw = false;
                     }
+                    sw = false;
 
                 } catch (Exception e) {
                     if (in == null) {
@@ -118,20 +110,20 @@ public class Grafos {
             int l = getVerticesMatriz(); //Toma el numero de lineas del archivo
             MA = new int[l][l];
             String c = null;
+            int i = 0;
             while ((c = br.readLine()) != null) {
                 String n[] = c.split(",");
-                for (int i = 0; i < l; i++) {
-                    for (int j = 0; j < l; j++) {
-                        MA[i][j] = Integer.parseInt(n[j]);
-                    }
+                for (int j = 0; j < l; j++) {
+                    MA[i][j] = Integer.parseInt(n[j]);
                 }
+                i++;
             }
             br.close();
             JOptionPane.showMessageDialog(null, "Matriz y lista cargada de C:/apps/");
             CrearLista();
         }
     }
-    
+
     /*Metodo que cuenta el numero de lineas del archivo, que será igual al número de vertices de la matriz*/
     public static int getVerticesMatriz() throws FileNotFoundException, IOException {
         File m = new File("C:/apps/matriz.txt");
@@ -204,9 +196,9 @@ public class Grafos {
         }
         return c;
     }
-    
+
     /*Metodo que guarda la lista en un archivo*/
-    public static void GuardarLista(String text) throws IOException{
+    public static void GuardarLista(String text) throws IOException {
         File l = new File("C:/apps/lista.txt");
         BufferedWriter bw;
         bw = new BufferedWriter(new FileWriter(l, false));
@@ -216,30 +208,24 @@ public class Grafos {
     }
 
     /*Metodo para hacer el recorrido en anchura*/
-    public static String BFS() {
+    public static String BFS(int in) {
         if (MA.length != 0) {
             visitados = new boolean[MA.length];
             Queue<Integer> cola = new LinkedList<>();
             ArrayList<Integer> recorridos = new ArrayList<>();
-            recorridos.add(ptr.getId());
-            cola.add(ptr.getId());
-            visitados[0] = true;
-            while (!cola.isEmpty()) {
-                int j = cola.remove();
-                for (int i = 0; i < MA.length; i++) {
-                    if (MA[i][j] != 0 && !visitados[i]) {
-                        cola.add(i);
-                        recorridos.add(i);
-                        visitados[i] = true;
-                    }
-                }
-            }
+            recorridos.add(in);
+            cola.add(in);
+            visitados[in] = true;
             String c = "";
-            for (int i = 0; i < recorridos.size(); i++) {
-                if (i == recorridos.size() - 1) {
-                    c = c + recorridos.get(i);
-                } else {
-                    c = c + recorridos.get(i) + ",";
+            while (!cola.isEmpty()) {
+                int i = cola.remove();
+                c = c + i + "";
+                for (int j = 0; j < MA.length; j++) {
+                    if (MA[i][j] != 0 && !visitados[j]) {
+                        cola.add(j);
+                        recorridos.add(j);
+                        visitados[j] = true;
+                    }
                 }
             }
             return c;
@@ -249,36 +235,45 @@ public class Grafos {
     }
 
     /*Metodo para hacer el recorrido en profundidad*/
-    public static String DFS() {
+    public static String DFS(int in) {
         if (MA.length != 0) {
             visitados = new boolean[MA.length];
             Stack<Integer> pila = new Stack<>();
             ArrayList<Integer> recorridos = new ArrayList<>();
-            recorridos.add(ptr.getId());
-            pila.add(ptr.getId());
-            visitados[0] = true;
-            while (!pila.isEmpty()) {
-                int j = pila.pop();
-                for (int i = 0; i < MA.length; i++) {
-                    if (MA[i][j] != 0 && !visitados[i]) {
-                        pila.add(i);
-                        recorridos.add(i);
-                        visitados[i] = true;
-                    }
-                }
-            }
+            recorridos.add(in);
+            pila.add(in);
+            visitados[in] = true;
             String c = "";
-            for (int i = 0; i < recorridos.size(); i++) {
-                if (i == recorridos.size() - 1) {
-                    c = c + recorridos.get(i);
-                } else {
-                    c = c + recorridos.get(i) + ",";
+            while (!pila.isEmpty()) {
+                int i = pila.pop();
+                c = c + i + "";
+                for (int j = 0; j < MA.length; j++) {
+                    if (MA[i][j] != 0 && !visitados[j]) {
+                        pila.add(j);
+                        recorridos.add(j);
+                        visitados[j] = true;
+                    }
                 }
             }
             return c;
         } else {
             return "No se ha creado el grafo";
         }
-
     }
+
+    /*Metodo para encontrar un camino de un nodo Vo a Vf*/
+    public static boolean Camino(int vo, int vf) {
+        String c=BFS(0);
+        String vfin = String.valueOf(vf);
+        String vini = String.valueOf(vf);
+        if ((c.indexOf(vfin) >= 0)&&(c.indexOf(vini)>=0)) {
+            return true;
+        } else {
+            return false;
+
+        }
+    }
+    
+    /*Metodo para actualizar matriz en vase de un nodo Vo a Vf*/
+    //TODO
 }
